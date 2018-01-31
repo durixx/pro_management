@@ -19,7 +19,6 @@ public class HomeController {
 
         this.userSession.setUserSession();
         model.addAttribute("userSession", userSession);
-
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("home");
         return modelAndView;
