@@ -1,0 +1,108 @@
+buildscript {
+	ext {
+		springBootVersion = '1.5.10.RELEASE'
+		mybatisBootVersion = '1.3.0'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+
+	}
+}
+
+apply plugin: 'java'
+//apply plugin: 'jsonschema2pojo'
+apply plugin: 'war'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+apply plugin: 'org.springframework.boot'
+
+group = 'sk.durco'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+compileJava.options.encoding = 'UTF-8'
+
+repositories {
+	mavenCentral()
+}
+
+
+dependencies {
+	compile('org.springframework.boot:spring-boot-starter-web')
+	compile("org.springframework.boot:spring-boot-starter-security")
+	compile("org.springframework.boot:spring-boot-devtools")
+	compile("org.springframework.security:spring-security-taglibs")
+	compile("org.apache.httpcomponents:httpclient:4.3.6")
+	compile("org.apache.httpcomponents:httpasyncclient:4.0.2")
+	compile("org.apache.httpcomponents:httpmime:4.3.6")
+	compile("org.json:json:20140107")
+	compile("commons-lang:commons-lang:2.4")
+	compile("com.fasterxml.jackson.core:jackson-databind:2.8.6")
+	compile("com.mashape.unirest:unirest-java:1.4.9")
+	compile("org.glassfish:javax.json:1.0.4")
+	compile 'mysql:mysql-connector-java'
+
+	// db
+	compile("org.mybatis.spring.boot:mybatis-spring-boot-starter:${mybatisBootVersion}")
+	providedRuntime("com.h2database:h2")
+
+
+	// kvoli embedovanemu tomcatu
+	compile('javax.servlet:jstl')
+
+	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
+	providedRuntime('org.apache.tomcat.embed:tomcat-embed-jasper')
+
+	// testy
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+/**
+jsonSchema2Pojo {
+	source = files("/src/main/resources/schema")
+	sourceType = 'jsonschema'
+	classNamePrefix = ''
+	classNameSuffix = ''
+	propertyWordDelimiters = ['_'] as char[]
+}
+**/
+task sourcesJar(type: Jar, dependsOn: classes) {
+	classifier = 'sources'
+	from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+	classifier = 'javadoc'
+	from javadoc.destinationDir
+}
+
+artifacts {
+	// Ak potrebujeme / nepotrebujeme vytvarat default artifacty so sources a javadoc - mozme nechat na publish
+	archives sourcesJar
+	// archives javadocJar
+}
+
+
+repositories {
+	// mavenLocal()
+	mavenCentral()
+	maven {
+		url "http://java01.exprit.sk:8081/artifactory/icz-local"
+	}
+	maven {
+		url "http://java01.exprit.sk:8081/artifactory/ext-local"
+	}
+}
+
+
+/* TESTOVANIE */
+//test.onlyIf { !Boolean.getBoolean('skip.tests') }
+
+test {
+	//we want display the following test events
+	testLogging {
+		events "passed", "failed", "skipped"
+		// events "passed", "skipped", "failed", "standardOut", "standardError"
+	}
+}

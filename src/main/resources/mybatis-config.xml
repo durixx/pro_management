@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- http://www.mybatis.org/mybatis-3/configuration.html -->
+
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <!--
+                Specifies if setters or map's put method will be called when a retrieved value is null.
+                It is useful when you rely on Map.keySet() or null value initialization.
+                Note primitives such as (int,boolean,etc.) will not be set to null.
+        -->
+        <setting name="callSettersOnNulls" value="true" />
+        <!--
+                When localCacheScope=STATEMENT then the cache is cleared at the end of each MyBatis statement.
+                When localCacheScope=SESSION, then the cache is cleared:
+                    1. at the end of the current transaction (or end of each statement when autoCommit=true)
+                    2. whenever any insert/update/delete statement is executed
+        -->
+        <setting name="localCacheScope" value="STATEMENT" />
+        <!--
+            Specifies which logging implementation MyBatis should use. If this setting is not present logging implementation will be autodiscovered.
+            SLF4J | LOG4J | LOG4J2 | JDK_LOGGING | COMMONS_LOGGING | STDOUT_LOGGING | NO_LOGGING
+        -->
+        <setting name="logImpl" value="LOG4J" />
+        <!--
+            Specifies the JDBC type for null values when no specific JDBC type was provided for the parameter.
+            Some drivers require specifying the column JDBC type but others work with generic values like NULL, VARCHAR or OTHER.
+            JdbcType enumeration. Most common are: NULL, VARCHAR and OTHER
+        -->
+        <setting name="jdbcTypeForNull" value="NULL" />
+    </settings>
+
+    <typeAliases>
+        <package name="sk.durco.promanagement.domain"/>
+    </typeAliases>
+
+    <!-- ENUM -->
+    <!--
+    <typeHandlers>
+        <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="NEJAKY_ENUM"/>
+    </typeHandlers>
+    -->
+
+    <mappers>
+        <package name="sk.durco.promanagement.mapper"/>
+    </mappers>
+
+</configuration>
